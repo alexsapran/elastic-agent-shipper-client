@@ -89,7 +89,7 @@ jobs:
         id: bench-diff
         with:
           version: latest
-          args: benchmark:diff bench-main bench-new
+          args: benchmark:diff bench-main bench-new bench-diff
 
 #      - name: Comment benchmark result
 #        continue-on-error: true
