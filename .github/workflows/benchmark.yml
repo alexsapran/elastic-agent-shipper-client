@@ -67,7 +67,7 @@ jobs:
       - name: Benchmark diff
         id: bench-next
         run: |
-          OUTPUT=$(mage benchmark:all bench-next 6)
+          OUTPUT=$(mage benchmark:all bench-next 8)
           echo "${OUTPUT}"
           echo "next<<EOF" >> $GITHUB_OUTPUT && cat bench-next >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
 
@@ -78,7 +78,7 @@ jobs:
           git fetch origin main ${{ github.event.pull_request.base.sha }}
           HEAD=$(git rev-parse HEAD)
           git reset --hard ${{ github.event.pull_request.base.sha }}
-          BASE=$(mage benchmark:all bench-main 6)
+          BASE=$(mage benchmark:all bench-main 8)
           git reset --hard $HEAD
           echo "base<<EOF" >> $GITHUB_OUTPUT && cat bench-main >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
 
@@ -96,7 +96,7 @@ jobs:
         with:
           variables: >-
             DIFF_OUT="${{ steps.diff.outputs.diff }}"
-            NEXT_OUT="${{ steps.bench-next.output.next }}"
+            NEXT_OUT="${{ steps.bench-next.outputs.next }}"
 
           template: |
             ### Benchmark Summary :rocket:
