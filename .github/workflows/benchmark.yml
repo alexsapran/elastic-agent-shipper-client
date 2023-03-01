@@ -64,7 +64,7 @@ jobs:
           path: ~/go/bin/benchstat
           key: ${{ runner.os }}-benchstat-legacy
 
-      - name: Benchmark diff
+      - name: Benchmark changes
         id: bench-next
         run: |
           OUTPUT=$(mage benchmark:all bench-next 8)
