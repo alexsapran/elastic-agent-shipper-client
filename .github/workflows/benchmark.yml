@@ -25,16 +25,15 @@ jobs:
   bench:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Go stable
-        if: env.GO_VERSION != 'tip'
-        uses: actions/setup-go@v3
-        with:
-          go-version-file: 'go.mod'
-
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           ref: ${{ (github.event.inputs.new != '') && github.event.inputs.new || github.event.ref }}
+
+      - name: Install Go stable
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: 'go.mod'
 
       - name: Go cache
         uses: actions/cache@v2
