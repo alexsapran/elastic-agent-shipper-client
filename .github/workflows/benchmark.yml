@@ -93,38 +93,33 @@ jobs:
           echo "diff<<EOF" >> $GITHUB_OUTPUT && echo "$OUTPUT" >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Summary report
-        id: summary
-        run: |
-          DIFFOUT=$(cat << EOF
-            ${{ steps.diff.outputs.diff }}
-          EOF
-          )
-          DIFFOUT="${DIFFOUT//'%'/'%25'}"
-          DIFFOUT="${DIFFOUT//$'\n'/'%0A'}"
-          DIFFOUT="${DIFFOUT//$'\r'/'%0D'}"
-          
-          NEWOUT=$(cat << EOF
-            ${{ steps.bench-next.output.next }}
-          EOF
-          )
-          NEWOUT="${NEWOUT//'%'/'%25'}"
-          NEWOUT="${NEWOUT//$'\n'/'%0A'}"
-          NEWOUT="${NEWOUT//$'\r'/'%0D'}"
-          
-          echo "### Benchmark Summary :rocket:" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "<details><summary>Benchmark diff with base branch</summary>" >> $GITHUB_STEP_SUMMARY
-          echo "```  " >> $GITHUB_STEP_SUMMARY
-          echo $DIFFOUT >> $GITHUB_STEP_SUMMARY
-          echo "``` </details>" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY 
-          echo "<details><summary>Benchmark result</summary>" >> $GITHUB_STEP_SUMMARY
-          echo "```  " >> $GITHUB_STEP_SUMMARY
-          echo $NEWOUT >> $GITHUB_STEP_SUMMARY
-          echo "``` </details>" >> $GITHUB_STEP_SUMMARY
+        uses: WcAServices/markdown-template-action@v1
+        with:
+          # These will be injected into the below template, in addition to GitHub's standard
+          # variables. You can perform string operations here as well.
+          variables: >-
+            DIFF_OUT="${{ steps.diff.outputs.diff }}"
+            NEXT_OUT="${{ steps.bench-next.output.next }}"
+          # The following language="..." comment enables syntax highlighting in JetBrains IDEs
 
-
-#      - name: Comment benchmark result
+          # language="markdown"
+          template: |
+            ### Benchmark Summary :rocket:
+            <details><summary>Benchmark diff with base branch</summary>
+              
+            ```bash
+            $DIFF_OUT
+            ```
+            </details>
+            
+            <details><summary>Benchmark result</summary>
+            
+            ```bash
+            $NEXT_OUT
+            ```
+            </details>  
+            
+              #      - name: Comment benchmark result
 #        continue-on-error: true
 #        uses: marocchino/sticky-pull-request-comment@v2
 #        with:
