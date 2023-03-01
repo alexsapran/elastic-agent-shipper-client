@@ -46,7 +46,7 @@ func BenchmarkCustomMarshal(b *testing.B) {
 			b.StartTimer()
 
 			jsonEventData := &fastjson.Writer{}
-			time.Sleep(1 * time.Nanosecond)
+			time.Sleep(1 * time.Second)
 			err := fastjson.Marshal(jsonEventData, testMessage)
 			if err != nil {
 				b.Logf("error marshaling data: %s", err)
