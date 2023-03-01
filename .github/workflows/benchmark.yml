@@ -57,7 +57,7 @@ jobs:
 
       - name: Download mage
         if: steps.cache-mage.outputs.cache-hit != 'true'
-        run: go get -u -d -v github.com/magefile/mage
+        run: go install github.com/magefile/mage@v1.13.0
 
       - name: Restore benchstat
         uses: actions/cache@v2
