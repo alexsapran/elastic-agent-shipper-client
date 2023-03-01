@@ -36,14 +36,13 @@ jobs:
           cache: true
 
       - name: Go cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           # In order:
           # * Module download cache
           # * Build cache (Linux)
           path: |
             ~/go/pkg/mod
-            ~/.cache/go-build
           key: ${{ runner.os }}-go-cache-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-cache
@@ -95,14 +94,10 @@ jobs:
       - name: Summary report
         uses: WcAServices/markdown-template-action@v1.0.2
         with:
-          # These will be injected into the below template, in addition to GitHub's standard
-          # variables. You can perform string operations here as well.
           variables: >-
             DIFF_OUT="${{ steps.diff.outputs.diff }}"
             NEXT_OUT="${{ steps.bench-next.output.next }}"
-          # The following language="..." comment enables syntax highlighting in JetBrains IDEs
 
-          # language="markdown"
           template: |
             ### Benchmark Summary :rocket:
             <details><summary>Benchmark diff with base branch</summary>
@@ -119,7 +114,8 @@ jobs:
             ```
             </details>  
             
-              #      - name: Comment benchmark result
+
+#      - name: Comment benchmark result
 #        continue-on-error: true
 #        uses: marocchino/sticky-pull-request-comment@v2
 #        with:
