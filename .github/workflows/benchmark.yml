@@ -113,26 +113,25 @@ jobs:
             $NEXT_OUT
             ```
             </details>  
-            
 
-#      - name: Comment benchmark result
-#        continue-on-error: true
-#        uses: marocchino/sticky-pull-request-comment@v2
-#        with:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          header: bench
-#          message: |
-#            ### Benchmark Result
-#            <details><summary>Benchmark diff with base branch</summary>
-#
-#            ```
-#            ${{ steps.bench.outputs.diff }}
-#            ```
-#            </details>
-#
-#            <details><summary>Benchmark result</summary>
-#
-#            ```
-#            ${{ steps.bench.outputs.result }}
-#            ```
-#            </details>
+      - name: Comment benchmark result
+        continue-on-error: true
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          header: benchmark
+          message: |
+            ### Benchmark Result
+            <details><summary>Benchmark diff with base branch</summary>
+
+            ```bash
+            ${{ steps.diff.outputs.diff }}
+            ```
+            </details>
+
+            <details><summary>Benchmark result</summary>
+
+            ```bash
+            ${{ steps.bench-next.outputs.next }}
+            ```
+            </details>
