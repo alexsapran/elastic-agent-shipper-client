@@ -92,6 +92,19 @@ jobs:
           echo "${OUTPUT}"
           echo "diff<<EOF" >> $GITHUB_OUTPUT && echo "$OUTPUT" >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Summary report
+        id: summary
+        run: |
+          echo "Summary report :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+          echo "### Benchmark Result" >> $GITHUB_STEP_SUMMARY
+          echo "<details><summary>Benchmark diff with base branch</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "```${{ steps.diff.outputs.diff }}``` </details>" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+          echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+          echo "<details><summary>Benchmark result</summary>" >> $GITHUB_STEP_SUMMARY
+          echo "``` ${{ steps.bench-next.output.next }} ``` </details>" >> $GITHUB_STEP_SUMMARY
+
 
 #      - name: Comment benchmark result
 #        continue-on-error: true
