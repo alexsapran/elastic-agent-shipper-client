@@ -95,17 +95,32 @@ jobs:
       - name: Summary report
         id: summary
         run: |
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          DIFFOUT=$(cat << EOF
+            ${{ steps.diff.outputs.diff }}
+          EOF
+          )
+          DIFFOUT="${DIFFOUT//'%'/'%25'}"
+          DIFFOUT="${DIFFOUT//$'\n'/'%0A'}"
+          DIFFOUT="${DIFFOUT//$'\r'/'%0D'}"
+          
+          NEWOUT=$(cat << EOF
+            ${{ steps.bench-next.output.next }}
+          EOF
+          )
+          NEWOUT="${NEWOUT//'%'/'%25'}"
+          NEWOUT="${NEWOUT//$'\n'/'%0A'}"
+          NEWOUT="${NEWOUT//$'\r'/'%0D'}"
+          
           echo "### Benchmark Summary :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "<details><summary>Benchmark diff with base branch</summary>" >> $GITHUB_STEP_SUMMARY
           echo "```  " >> $GITHUB_STEP_SUMMARY
-          echo ${{ steps.diff.outputs.diff }} >> $GITHUB_STEP_SUMMARY
+          echo $DIFFOUT >> $GITHUB_STEP_SUMMARY
           echo "``` </details>" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY 
           echo "<details><summary>Benchmark result</summary>" >> $GITHUB_STEP_SUMMARY
           echo "```  " >> $GITHUB_STEP_SUMMARY
-          echo ${{ steps.bench-next.output.next }} >> $GITHUB_STEP_SUMMARY
+          echo $NEWOUT >> $GITHUB_STEP_SUMMARY
           echo "``` </details>" >> $GITHUB_STEP_SUMMARY
 
 
