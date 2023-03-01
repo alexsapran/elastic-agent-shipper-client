@@ -74,7 +74,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: { { github.event.inputs.old } }
+          ref: ${{ github.event.inputs.old }}
 
       - name: Run base benchmark
         uses: magefile/mage-action@v2
