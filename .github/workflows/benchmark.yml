@@ -74,9 +74,9 @@ jobs:
 
       - name: Run benchmark for base code
         id: bench-base
-        if: env.RUN_BASE_BENCHMARK == 'on' && steps.base-benchmark.outputs.cache-hit != 'true' && (github.event.pull_request.base.sha != '' || github.event.inputs.old != '')
+        if: env.RUN_BASE_BENCHMARK == 'on' && (github.event.pull_request.base.sha != '' || github.event.inputs.old != '')
         run: |
-          git fetch origin master ${{ github.event.pull_request.base.sha }}
+          git fetch origin main ${{ github.event.pull_request.base.sha }}
           HEAD=$(git rev-parse HEAD)
           git reset --hard ${{ github.event.pull_request.base.sha }}
           BASE=$(mage benchmark:all bench-main 10)
