@@ -64,12 +64,12 @@ jobs:
           # Use base sha for PR or new commit hash for master/main push in benchmark result key.
           key: ${{ runner.os }}-bench-${{ (github.event.pull_request.base.sha != github.event.after) && github.event.pull_request.base.sha || github.event.after }}
 
-      - name: Run benchmark
+      - name: Run next benchmark
         uses: magefile/mage-action@v2
         id: bench-run
         with:
           version: latest
-          args: benchmark:all bench-new 10
+          args: -l
 
       - name: Run base benchmark
         uses: magefile/mage-action@v2
@@ -79,7 +79,7 @@ jobs:
           version: latest
           args: benchmark:all bench-main 10
 
-      - name: Run base benchmark
+      - name: Run benchstat diff
         uses: magefile/mage-action@v2
         id: bench-diff
         with:
