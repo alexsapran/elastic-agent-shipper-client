@@ -69,7 +69,7 @@ jobs:
         run: |
           OUTPUT=$(mage benchmark:all bench-next 6)
           echo "${OUTPUT}"
-          echo "next<<EOF" >> $GITHUB_OUTPUT && echo "$OUTPUT" >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
+          echo "next<<EOF" >> $GITHUB_OUTPUT && cat bench-next >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Run benchmark for base code
         id: bench-base
@@ -78,9 +78,9 @@ jobs:
           git fetch origin main ${{ github.event.pull_request.base.sha }}
           HEAD=$(git rev-parse HEAD)
           git reset --hard ${{ github.event.pull_request.base.sha }}
-          BASE=$(mage benchmark:all bench-main 10)
+          BASE=$(mage benchmark:all bench-main 6)
           git reset --hard $HEAD
-          echo "base<<EOF" >> $GITHUB_OUTPUT && echo "$BASE" >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
+          echo "base<<EOF" >> $GITHUB_OUTPUT && cat bench-main >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Diff with base
         id: diff
@@ -89,7 +89,7 @@ jobs:
           echo "${{ steps.bench-base.outputs.base }}" > bench-base
           OUTPUT=$(mage benchmark:diff bench-base bench-next bench-diff)
           echo "${OUTPUT}"
-          echo "diff<<EOF" >> $GITHUB_OUTPUT && echo "$OUTPUT" >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
+          echo "diff<<EOF" >> $GITHUB_OUTPUT && cat bench-diff >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Summary report
         uses: WcAServices/markdown-template-action@v1.0.2
